@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Cinema</string>
+    <string name="movie_poster_desc">Poster</string>
+    <string name="rating_text_desc">Rating:  </string>
+    <string name="movie_year_desc">Year:  </string>
+    <string name="movie_genre_desc">Genre:  </string>
+    <string name="buy_ticket_btn_text">Buy ticket</string>
+    <string name="available_tickets_desc">Available Tickets:</string>
+    <string name="buy_ticket_btn">Buy Ticket</string>
+    <string name="return_ticket_btn">Return Ticket</string>
+    <string name="something_went_wrong_text">Something went wrong..</string>
+</resources>
