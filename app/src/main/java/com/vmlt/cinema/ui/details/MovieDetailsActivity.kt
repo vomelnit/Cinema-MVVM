@@ -1,5 +1,6 @@
 package com.vmlt.cinema.ui.details
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,14 +8,15 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import com.vmlt.cinema.utils.model.Movie
-import com.vmlt.cinema.utils.MovieUtils
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.vmlt.cinema.R
+import com.vmlt.cinema.ui.tickets.TicketsActivity
+import com.vmlt.cinema.ui.viewmodels.MoviesViewModel
+import com.vmlt.cinema.utils.model.Movie
 
-class MovieDetailsActivity : ComponentActivity(), MovieDetailsContract.DetailsView,
-    View.OnClickListener {
-
-    private lateinit var detailsPresenter: MovieDetailsContract.DetailsPresenter
+class MovieDetailsActivity : ComponentActivity(), View.OnClickListener {
+    private lateinit var moviesViewModel: MoviesViewModel
     private lateinit var movieRatingText: TextView
     private var movieId: Int = -1
 
@@ -23,16 +25,15 @@ class MovieDetailsActivity : ComponentActivity(), MovieDetailsContract.DetailsVi
         movieId = intent.getIntExtra("MovieId", -1)
         Log.i("MovieDetailsActivity", "movieId = $movieId");
 
-        detailsPresenter = MovieDetailsPresenter(this, this, MovieUtils)
-        val movieDetails: Movie? = detailsPresenter.getMovieDetails(movieId)
+        moviesViewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
 
-        if (movieDetails == null) {
-            setContentView(R.layout.issue_layout)
-            return
-        }
+        moviesViewModel.getMovieDetails(movieId).observe(this, Observer { movie ->
+            setMovieDetailsContent(movie)
+        })
+    }
 
+    private fun setMovieDetailsContent(movieDetails: Movie) {
         setContentView(R.layout.activity_movie_details)
-
 
         val moviePosterImage: ImageView = findViewById(R.id.movie_poster_image)
         movieRatingText = findViewById(R.id.movie_rating_text)
@@ -53,12 +54,14 @@ class MovieDetailsActivity : ComponentActivity(), MovieDetailsContract.DetailsVi
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.buy_ticket_btn -> {
-                detailsPresenter.startActivityForTickets(movieId)
+                startActivityForTickets(movieId)
             }
         }
     }
 
-    override fun updateMovieRating(movieRating: Float) {
-        movieRatingText.text = movieRating.toString()
+    private fun startActivityForTickets(movieId: Int) {
+        val intent = Intent(this, TicketsActivity::class.java)
+        intent.putExtra("MovieId", movieId)
+        startActivity(intent)
     }
 }
