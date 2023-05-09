@@ -1,7 +1,8 @@
 package com.vmlt.cinema.utils
 
 object TicketsUtils {
-    private val ticketsMap: MutableMap<Int, Int> = generateTicketsList()
+    private val defaultTicketsMap: Map<Int, Int> = generateTicketsList()
+    private val ticketsMap: MutableMap<Int, Int> = defaultTicketsMap.toMutableMap()
 
     /* Mock function */
     private fun generateTicketsList(): MutableMap<Int, Int> {
@@ -18,16 +19,20 @@ object TicketsUtils {
     }
 
     fun removeTicketFromMovie(movieId: Int) {
-        ticketsMap[movieId]?.let {
-            if (it > 0) {
-                ticketsMap[movieId] = it - 1
+        ticketsMap[movieId]?.let { availableTickets ->
+            if (availableTickets > 0) {
+                ticketsMap[movieId] = availableTickets - 1
             }
         }
     }
 
     fun addTicketFromMovie(movieId: Int) {
-        ticketsMap[movieId]?.let {
-            ticketsMap[movieId] = it + 1
+        val defaultAmount = defaultTicketsMap[movieId] ?: return
+
+        ticketsMap[movieId]?.let { availableTickets ->
+            if (availableTickets < defaultAmount) {
+                ticketsMap[movieId] = availableTickets + 1
+            }
         }
     }
 }

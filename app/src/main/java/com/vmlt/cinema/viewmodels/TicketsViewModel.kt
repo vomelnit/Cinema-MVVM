@@ -1,4 +1,4 @@
-package com.vmlt.cinema.ui.viewmodels
+package com.vmlt.cinema.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,12 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.vmlt.cinema.utils.TicketsUtils
 
 class TicketsViewModel(private val ticketsModel: TicketsUtils = TicketsUtils) : ViewModel() {
-    private val ticketsAmount = MutableLiveData<Int>()
-
-    fun getTicketsAmount(movieId: Int): LiveData<Int> {
-        updateTicketsAmount(movieId)
-        return ticketsAmount
-    }
+    private val _ticketsAmount = MutableLiveData<Int>()
+    val ticketsAmount: LiveData<Int> = _ticketsAmount
 
     fun buyTicketFromCinema(movieId: Int) {
         ticketsModel.removeTicketFromMovie(movieId)
@@ -20,9 +16,10 @@ class TicketsViewModel(private val ticketsModel: TicketsUtils = TicketsUtils) : 
 
     fun returnTicketToCinema(movieId: Int) {
         ticketsModel.addTicketFromMovie(movieId)
+        updateTicketsAmount(movieId)
     }
 
-    private fun updateTicketsAmount(movieId: Int) {
-        ticketsAmount.value = ticketsModel.getTicketsQuantityForMovie(movieId)
+    fun updateTicketsAmount(movieId: Int) {
+        _ticketsAmount.value = ticketsModel.getTicketsQuantityForMovie(movieId)
     }
 }

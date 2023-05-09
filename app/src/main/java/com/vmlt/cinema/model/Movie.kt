@@ -1,4 +1,4 @@
-package com.vmlt.cinema.utils.model
+package com.vmlt.cinema.model
 
 data class Movie(
     val id: Int,

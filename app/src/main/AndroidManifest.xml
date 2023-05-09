@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Cinema"
         tools:targetApi="31">
         <activity
-            android:name="com.vmlt.cinema.ui.main.MainActivity"
+            android:name="com.vmlt.cinema.view.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Cinema">
             <intent-filter>
@@ -24,23 +24,23 @@
         </activity>
 
         <activity
-            android:name=".ui.details.MovieDetailsActivity"
+            android:name=".view.details.MovieDetailsActivity"
             android:exported="true"
-            android:parentActivityName="com.vmlt.cinema.ui.main.MainActivity"
+            android:parentActivityName="com.vmlt.cinema.view.main.MainActivity"
             android:theme="@style/Theme.Cinema">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vmlt.cinema.ui.main.MainActivity" />
+                android:value="com.vmlt.cinema.view.main.MainActivity" />
         </activity>
 
         <activity
-            android:name=".ui.tickets.TicketsActivity"
+            android:name=".view.tickets.TicketsActivity"
             android:exported="true"
-            android:parentActivityName=".ui.details.MovieDetailsActivity"
+            android:parentActivityName=".view.details.MovieDetailsActivity"
             android:theme="@style/Theme.Cinema">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.details.MovieDetailsActivity" />
+                android:value=".view.details.MovieDetailsActivity" />
         </activity>
     </application>
 
