@@ -8,5 +8,4 @@
     <string name="available_tickets_desc">Available Tickets:</string>
     <string name="buy_ticket_btn">Buy Ticket</string>
     <string name="return_ticket_btn">Return Ticket</string>
-    <string name="something_went_wrong_text">Something went wrong..</string>
 </resources>

@@ -22,26 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".view.details.MovieDetailsActivity"
-            android:exported="true"
-            android:parentActivityName="com.vmlt.cinema.view.main.MainActivity"
-            android:theme="@style/Theme.Cinema">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.vmlt.cinema.view.main.MainActivity" />
-        </activity>
-
-        <activity
-            android:name=".view.tickets.TicketsActivity"
-            android:exported="true"
-            android:parentActivityName=".view.details.MovieDetailsActivity"
-            android:theme="@style/Theme.Cinema">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".view.details.MovieDetailsActivity" />
-        </activity>
     </application>
 
 </manifest>

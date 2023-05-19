@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/main_fragment">
+
+    <fragment
+        android:id="@+id/main_fragment"
+        android:name="com.vmlt.cinema.view.main.MainFragment"
+        android:label="main_fragment"
+        tools:layout="@layout/fragment_main" />
+
+    <fragment
+        android:id="@+id/movie_details_fragment"
+        android:name="com.vmlt.cinema.view.details.MovieDetailsFragment"
+        android:label="movie_details_fragment"
+        tools:layout="@layout/fragment_movie_details" />
+
+    <fragment
+        android:id="@+id/tickets_fragment"
+        android:name="com.vmlt.cinema.view.tickets.TicketsFragment"
+        android:label="fragment_tickets"
+        tools:layout="@layout/fragment_tickets" />
+
+    <action
+        android:id="@+id/action_mainFragment_to_movieDetailsFragment"
+        app:destination="@id/movie_details_fragment" />
+    <action
+        android:id="@+id/action_movieDetailsFragment_to_ticketsFragment"
+        app:destination="@id/tickets_fragment" />
+
+</navigation>
