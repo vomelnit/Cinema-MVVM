@@ -12,6 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.vmlt.cinema.R
+import com.vmlt.cinema.data.db.CinemaDatabase
+import com.vmlt.cinema.data.repository.MovieCacheImpl
+import com.vmlt.cinema.data.repository.MovieRepositoryImpl
 import com.vmlt.cinema.domain.entities.Movie
 import com.vmlt.cinema.domain.usecases.GetMovieDetailsByIdUseCase
 import com.vmlt.cinema.presentation.viewmodels.DetailsViewModel
@@ -47,10 +50,11 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun setupRepository() {
-        val movieCacheRepository = com.vmlt.cinema.data.repository.MovieCacheImpl()
-        val movieRepository =
-            com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
-        getMovieDetailsByIdUseCase = GetMovieDetailsByIdUseCase(movieRepository)
+        context?.let { context ->
+            val movieCacheRepository = MovieCacheImpl(CinemaDatabase.getDatabase(context = context))
+            val movieRepository = MovieRepositoryImpl(movieCacheRepository)
+            getMovieDetailsByIdUseCase = GetMovieDetailsByIdUseCase(movieRepository)
+        }
     }
 
     private fun setupViewModel() {

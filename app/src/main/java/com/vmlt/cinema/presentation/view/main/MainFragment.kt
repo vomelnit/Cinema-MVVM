@@ -4,18 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.MainThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vmlt.cinema.R
+import com.vmlt.cinema.data.db.CinemaDatabase
 import com.vmlt.cinema.domain.usecases.GetEntireMovieBasicInfoListUseCase
 import com.vmlt.cinema.presentation.adapters.MovieBasicInfoAdapter
 import com.vmlt.cinema.presentation.view.details.INTENT_EXTRA_MOVIE_ID_KEY
 import com.vmlt.cinema.presentation.viewmodels.MoviesViewModel
 import com.vmlt.cinema.presentation.viewmodels.factories.MoviesViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 class MainFragment : Fragment() {
 
@@ -43,10 +49,15 @@ class MainFragment : Fragment() {
     }
 
     private fun setupDataFetching() {
-        val movieCacheRepository = com.vmlt.cinema.data.repository.MovieCacheImpl()
-        val movieRepository =
-            com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
-        getEntireMovieBasicInfoListUseCase = GetEntireMovieBasicInfoListUseCase(movieRepository)
+        context?.let {
+            val movieCacheRepository = com.vmlt.cinema.data.repository.MovieCacheImpl(
+                CinemaDatabase.getDatabase(context = it)
+            )
+            val movieRepository =
+                com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
+            getEntireMovieBasicInfoListUseCase =
+                GetEntireMovieBasicInfoListUseCase(movieRepository)
+        }
     }
 
     private fun setupUi() {

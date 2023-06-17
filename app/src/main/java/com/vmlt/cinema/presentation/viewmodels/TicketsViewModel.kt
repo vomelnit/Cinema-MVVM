@@ -3,10 +3,14 @@ package com.vmlt.cinema.presentation.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.vmlt.cinema.domain.entities.TicketsInfo
 import com.vmlt.cinema.domain.usecases.BuyTicketByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.GetAvailableTicketsAmountByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.ReturnTicketByMovieIdUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TicketsViewModel(
     private val getAvailableTicketsAmountByMovieIdUseCase: GetAvailableTicketsAmountByMovieIdUseCase,
@@ -20,31 +24,60 @@ class TicketsViewModel(
     val movieName: LiveData<String> = _movieName
 
     fun buyTicketFromCinema(movieId: Int) {
-        buyTicketByMovieIdUseCase.execute(movieId)
-        updateTicketsAmount(movieId)
+        viewModelScope.launch(Dispatchers.IO) {
+            buyTicketByMovieIdUseCase.execute(movieId)
+            updateTicketsAmount(movieId)
+        }
     }
 
     fun returnTicketToCinema(movieId: Int) {
-        returnTicketByMovieIdUseCase.execute(movieId)
-        updateTicketsAmount(movieId)
-    }
-
-    fun updateTicketsAmount(movieId: Int) {
-        val ticketsInfo: TicketsInfo? = getAvailableTicketsAmountByMovieIdUseCase.execute(movieId)
-        ticketsInfo?.let {
-            _ticketsAmount.value = it.ticketsAmount
-        } ?: run {
-            _ticketsAmount.value = -1
-            _movieName.value = "Not found"
+        viewModelScope.launch(Dispatchers.IO) {
+            returnTicketByMovieIdUseCase.execute(movieId)
+            updateTicketsAmount(movieId)
         }
     }
 
-    fun getMovieName(movieId: Int) {
-        val ticketsInfo: TicketsInfo? = getAvailableTicketsAmountByMovieIdUseCase.execute(movieId)
-        ticketsInfo?.let {
-            _movieName.value = it.name
+    private suspend fun updateTicketsAmount(movieId: Int) = withContext(Dispatchers.IO) {
+        val ticketsInfo: TicketsInfo? =
+            getAvailableTicketsAmountByMovieIdUseCase.execute(movieId)
+
+        ticketsInfo?.ticketsAmount?.let { ticketsAmount ->
+            setTicketValues(ticketsAmount)
         } ?: run {
-            _movieName.value = "Not found"
+            setTicketsValuesToErrorState()
         }
+    }
+
+    private suspend fun setTicketValues(ticketsAmount: Int) = withContext(Dispatchers.Main) {
+        _ticketsAmount.value = ticketsAmount
+    }
+
+    private suspend fun setTicketsValuesToErrorState() = withContext(Dispatchers.Main) {
+        _ticketsAmount.value = -1
+        _movieName.value = "Not found"
+    }
+
+    fun refreshScreenInfo(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTicketsAmount(movieId)
+            updateMovieName(movieId)
+        }
+    }
+
+    private suspend fun updateMovieName(movieId: Int) {
+        val ticketsInfo: TicketsInfo? =
+            getAvailableTicketsAmountByMovieIdUseCase.execute(movieId)
+        ticketsInfo?.name?.let { movieName ->
+            setMovieName(movieName)
+        } ?: run {
+            setMovieNameToError()
+        }
+    }
+
+    private suspend fun setMovieName(movieName: String) = withContext(Dispatchers.Main){
+        _movieName.value = movieName
+    }
+    private suspend fun setMovieNameToError() = withContext(Dispatchers.Main){
+        _movieName.value = "Not found"
     }
 }

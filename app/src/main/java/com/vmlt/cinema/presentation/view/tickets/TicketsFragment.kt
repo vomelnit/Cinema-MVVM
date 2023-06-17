@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.vmlt.cinema.R
+import com.vmlt.cinema.data.db.CinemaDatabase
 import com.vmlt.cinema.domain.usecases.BuyTicketByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.GetAvailableTicketsAmountByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.ReturnTicketByMovieIdUseCase
@@ -50,12 +51,15 @@ class TicketsFragment : Fragment() {
     }
 
     private fun setupRepository() {
-        val movieCacheRepository = com.vmlt.cinema.data.repository.MovieCacheImpl()
-        val movieRepository =
-            com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
-        getTicketsAmountUseCase = GetAvailableTicketsAmountByMovieIdUseCase(movieRepository)
-        buyTicketUseCase = BuyTicketByMovieIdUseCase(movieRepository)
-        returnTicketUseCase = ReturnTicketByMovieIdUseCase(movieRepository)
+        context?.let {
+            val movieCacheRepository =
+                com.vmlt.cinema.data.repository.MovieCacheImpl(CinemaDatabase.getDatabase(context = it))
+            val movieRepository =
+                com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
+            getTicketsAmountUseCase = GetAvailableTicketsAmountByMovieIdUseCase(movieRepository)
+            buyTicketUseCase = BuyTicketByMovieIdUseCase(movieRepository)
+            returnTicketUseCase = ReturnTicketByMovieIdUseCase(movieRepository)
+        }
 
     }
 
@@ -90,7 +94,6 @@ class TicketsFragment : Fragment() {
                 movieNameText?.text = name
             }
         })
-        ticketsViewModel.getMovieName(movieId)
 
         ticketsViewModel = ViewModelProvider(this)[TicketsViewModel::class.java]
 
@@ -99,6 +102,7 @@ class TicketsFragment : Fragment() {
                 ticketsAmountText?.text = ticketsAmount.toString()
             }
         })
-        ticketsViewModel.updateTicketsAmount(movieId)
+
+        ticketsViewModel.refreshScreenInfo(movieId)
     }
 }

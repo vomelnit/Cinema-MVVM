@@ -5,7 +5,7 @@ import com.vmlt.cinema.domain.repositories.MovieRepository
 
 class GetAvailableTicketsAmountByMovieIdUseCase(private val movieRepository: MovieRepository) {
 
-    fun execute(movieId: Int): TicketsInfo {
+    suspend fun execute(movieId: Int): TicketsInfo? {
         return movieRepository.getAvailableTicketAmountByMovieId(movieId)
     }
 }
