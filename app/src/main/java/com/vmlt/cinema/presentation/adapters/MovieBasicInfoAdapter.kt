@@ -38,6 +38,7 @@ class MovieBasicInfoAdapter(val onItemClick: (Int) -> Unit) :
         private val movieNameTextView: TextView = itemView.findViewById(R.id.movie_name_text)
 
         fun bind(movie: MovieBasicInfo) {
+            println("movie.iconId="+movie.iconId)
             movieIconImageView.setImageResource(movie.iconId)
             movieNameTextView.text = movie.name
 
