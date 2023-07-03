@@ -11,8 +11,9 @@ import com.vmlt.cinema.domain.usecases.ReturnTicketByMovieIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class TicketsViewModel(
+class TicketsViewModel @Inject constructor(
     private val getAvailableTicketsAmountByMovieIdUseCase: GetAvailableTicketsAmountByMovieIdUseCase,
     private val buyTicketByMovieIdUseCase: BuyTicketByMovieIdUseCase,
     private val returnTicketByMovieIdUseCase: ReturnTicketByMovieIdUseCase
@@ -74,10 +75,11 @@ class TicketsViewModel(
         }
     }
 
-    private suspend fun setMovieName(movieName: String) = withContext(Dispatchers.Main){
+    private suspend fun setMovieName(movieName: String) = withContext(Dispatchers.Main) {
         _movieName.value = movieName
     }
-    private suspend fun setMovieNameToError() = withContext(Dispatchers.Main){
+
+    private suspend fun setMovieNameToError() = withContext(Dispatchers.Main) {
         _movieName.value = "Not found"
     }
 }

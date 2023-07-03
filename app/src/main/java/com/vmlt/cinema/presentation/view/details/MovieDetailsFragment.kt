@@ -1,5 +1,6 @@
 package com.vmlt.cinema.presentation.view.details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,25 +10,30 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.vmlt.cinema.R
-import com.vmlt.cinema.data.db.CinemaDatabase
-import com.vmlt.cinema.data.repository.MovieCacheImpl
-import com.vmlt.cinema.data.repository.MovieRepositoryImpl
 import com.vmlt.cinema.domain.entities.Movie
 import com.vmlt.cinema.domain.usecases.GetMovieDetailsByIdUseCase
+import com.vmlt.cinema.presentation.view.main.MainActivity
 import com.vmlt.cinema.presentation.viewmodels.DetailsViewModel
-import com.vmlt.cinema.presentation.viewmodels.factories.DetailsViewModelFactory
+import javax.inject.Inject
 
 const val INTENT_EXTRA_MOVIE_ID_KEY = "MovieId"
 
 class MovieDetailsFragment : Fragment() {
-    private lateinit var detailsViewModel: DetailsViewModel
-    private lateinit var getMovieDetailsByIdUseCase: GetMovieDetailsByIdUseCase
+    @Inject
+    internal lateinit var detailsViewModel: DetailsViewModel
+
+    @Inject
+    internal lateinit var getMovieDetailsByIdUseCase: GetMovieDetailsByIdUseCase
 
 
     private var movieId: Int = -1
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).movieListComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,25 +50,11 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         movieId = arguments?.getInt(INTENT_EXTRA_MOVIE_ID_KEY) ?: -1
 
-        setupRepository()
         setupViewModel()
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private fun setupRepository() {
-        context?.let { context ->
-            val movieCacheRepository = MovieCacheImpl(CinemaDatabase.getDatabase(context = context))
-            val movieRepository = MovieRepositoryImpl(movieCacheRepository)
-            getMovieDetailsByIdUseCase = GetMovieDetailsByIdUseCase(movieRepository)
-        }
-    }
-
     private fun setupViewModel() {
-        detailsViewModel = ViewModelProvider(
-            this,
-            DetailsViewModelFactory(getMovieDetailsByIdUseCase, this)
-        )[DetailsViewModel::class.java]
-
         detailsViewModel.movieDetails.observe(viewLifecycleOwner, Observer { movie ->
             view?.let { setMovieDetailsContent(movie, it) }
         })

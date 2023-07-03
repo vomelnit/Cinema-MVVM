@@ -8,7 +8,7 @@ import com.vmlt.cinema.data.entities.MovieEntity
 import com.vmlt.cinema.data.entities.SessionEntity
 
 @Database(entities = [MovieEntity::class, SessionEntity::class], version = 1)
-    abstract class CinemaDatabase : RoomDatabase() {
+abstract class CinemaDatabase : RoomDatabase() {
 
     abstract fun getMovieDao(): MovieDao
     abstract fun getSessionDao(): SessionDao

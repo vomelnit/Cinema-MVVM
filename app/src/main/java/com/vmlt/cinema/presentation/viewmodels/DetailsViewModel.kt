@@ -9,9 +9,9 @@ import com.vmlt.cinema.domain.usecases.GetMovieDetailsByIdUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeout
+import javax.inject.Inject
 
-class DetailsViewModel(private val getMovieDetailsByIdUseCase: GetMovieDetailsByIdUseCase) :
+class DetailsViewModel @Inject constructor(private val getMovieDetailsByIdUseCase: GetMovieDetailsByIdUseCase) :
     ViewModel() {
 
     private val _movieDetails = MutableLiveData<Movie>()

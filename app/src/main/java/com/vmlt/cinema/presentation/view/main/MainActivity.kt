@@ -1,11 +1,18 @@
 package com.vmlt.cinema.presentation.view.main
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.vmlt.cinema.R
+import com.vmlt.cinema.presentation.CinemaApplication
+import com.vmlt.cinema.presentation.di.MovieComponent
 
-class MainActivity : FragmentActivity() {
+class MainActivity : AppCompatActivity() {
+    lateinit var movieListComponent: MovieComponent
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        movieListComponent =
+            (applicationContext as CinemaApplication).appComponent.movieListComponent().create()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }

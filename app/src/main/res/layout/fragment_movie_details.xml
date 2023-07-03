@@ -30,7 +30,6 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:gravity="center_horizontal"
-        android:textColor="@color/black"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@+id/barrier2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/rating_text_desc"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/movie_year_text"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,7 +53,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/movie_year_text"
         app:layout_constraintStart_toEndOf="@id/barrier" />
@@ -66,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/movie_year_desc"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/movie_rating_text"
         app:layout_constraintStart_toStartOf="parent" />
@@ -78,7 +74,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/movie_genre_text"
         app:layout_constraintStart_toEndOf="@id/barrier" />
@@ -89,7 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="@string/movie_genre_desc"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/movie_genre_text"
         app:layout_constraintStart_toStartOf="parent" />
@@ -100,7 +94,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="24dp"
-        android:textColor="@color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/buy_ticket_btn"
         app:layout_constraintStart_toEndOf="@id/barrier" />

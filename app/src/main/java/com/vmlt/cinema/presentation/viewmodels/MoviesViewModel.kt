@@ -9,8 +9,9 @@ import com.vmlt.cinema.domain.usecases.GetEntireMovieBasicInfoListUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MoviesViewModel(private val getEntireMovieBasicInfoListUseCase: GetEntireMovieBasicInfoListUseCase) :
+class MoviesViewModel @Inject constructor(private val getEntireMovieBasicInfoListUseCase: GetEntireMovieBasicInfoListUseCase) :
     ViewModel() {
 
     private val _movieBasicInfoList = MutableLiveData<List<MovieBasicInfo>>()

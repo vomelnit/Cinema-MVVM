@@ -2,22 +2,19 @@ package com.vmlt.cinema.data.repository
 
 import com.vmlt.cinema.data.R
 import com.vmlt.cinema.data.db.CinemaDatabase
-import com.vmlt.cinema.data.db.MockDatabase
 import com.vmlt.cinema.data.db.MovieDao
 import com.vmlt.cinema.data.db.SessionDao
 import com.vmlt.cinema.data.entities.MovieEntity
 import com.vmlt.cinema.data.entities.SessionEntity
-import com.vmlt.cinema.domain.entities.Movie
-import com.vmlt.cinema.domain.entities.MovieBasicInfo
 import com.vmlt.cinema.domain.entities.TicketsInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.util.concurrent.Flow
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MovieCacheImpl(val cinemaDatabase: CinemaDatabase) {
+class MovieCacheImpl @Inject constructor(private val cinemaDatabase: CinemaDatabase) {
 
     private val movieDao: MovieDao = cinemaDatabase.getMovieDao()
     private val sessionDao: SessionDao = cinemaDatabase.getSessionDao()
@@ -67,15 +64,15 @@ class MovieCacheImpl(val cinemaDatabase: CinemaDatabase) {
                 )
             )
 
-            sessionDao.insert(SessionEntity(1, 1, 33, 44,12.50, 1))
-            sessionDao.insert(SessionEntity(2, 2, 24, 47,13.99, 2))
-            sessionDao.insert(SessionEntity(3, 3, 50, 100,9.99, 3))
-            sessionDao.insert(SessionEntity(4, 4, 4, 20,12.09, 2))
+            sessionDao.insert(SessionEntity(1, 1, 33, 44, 12.50, 1))
+            sessionDao.insert(SessionEntity(2, 2, 24, 47, 13.99, 2))
+            sessionDao.insert(SessionEntity(3, 3, 50, 100, 9.99, 3))
+            sessionDao.insert(SessionEntity(4, 4, 4, 20, 12.09, 2))
         }
     }
 
     //    private val mockDatabase: MockDatabase = MockDatabase()
-    fun  getAllMovies(): List<MovieEntity> {
+    fun getAllMovies(): List<MovieEntity> {
         return movieDao.getAllMovies()
     }
 

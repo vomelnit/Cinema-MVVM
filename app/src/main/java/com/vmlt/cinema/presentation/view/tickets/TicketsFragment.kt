@@ -1,5 +1,6 @@
 package com.vmlt.cinema.presentation.view.tickets
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,26 +9,30 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.vmlt.cinema.R
-import com.vmlt.cinema.data.db.CinemaDatabase
 import com.vmlt.cinema.domain.usecases.BuyTicketByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.GetAvailableTicketsAmountByMovieIdUseCase
 import com.vmlt.cinema.domain.usecases.ReturnTicketByMovieIdUseCase
 import com.vmlt.cinema.presentation.view.details.INTENT_EXTRA_MOVIE_ID_KEY
+import com.vmlt.cinema.presentation.view.main.MainActivity
 import com.vmlt.cinema.presentation.viewmodels.TicketsViewModel
-import com.vmlt.cinema.presentation.viewmodels.factories.TicketsViewModelFactory
+import javax.inject.Inject
 
 class TicketsFragment : Fragment() {
     private var movieNameText: TextView? = null
     private var ticketsAmountText: TextView? = null
 
-    private lateinit var ticketsViewModel: TicketsViewModel
-    private lateinit var getTicketsAmountUseCase: GetAvailableTicketsAmountByMovieIdUseCase
-    private lateinit var buyTicketUseCase: BuyTicketByMovieIdUseCase
-    private lateinit var returnTicketUseCase: ReturnTicketByMovieIdUseCase
+    @Inject internal  lateinit var ticketsViewModel: TicketsViewModel
+    @Inject internal lateinit var getTicketsAmountUseCase: GetAvailableTicketsAmountByMovieIdUseCase
+    @Inject internal lateinit var buyTicketUseCase: BuyTicketByMovieIdUseCase
+    @Inject internal lateinit var returnTicketUseCase: ReturnTicketByMovieIdUseCase
 
     private var movieId: Int = -1
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).movieListComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,23 +49,9 @@ class TicketsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         movieId = arguments?.getInt(INTENT_EXTRA_MOVIE_ID_KEY) ?: -1
 
-        setupRepository()
         setupUi(view)
         setupViewModel()
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun setupRepository() {
-        context?.let {
-            val movieCacheRepository =
-                com.vmlt.cinema.data.repository.MovieCacheImpl(CinemaDatabase.getDatabase(context = it))
-            val movieRepository =
-                com.vmlt.cinema.data.repository.MovieRepositoryImpl(movieCacheRepository)
-            getTicketsAmountUseCase = GetAvailableTicketsAmountByMovieIdUseCase(movieRepository)
-            buyTicketUseCase = BuyTicketByMovieIdUseCase(movieRepository)
-            returnTicketUseCase = ReturnTicketByMovieIdUseCase(movieRepository)
-        }
-
     }
 
     private fun setupUi(rootView: View) {
@@ -79,23 +70,11 @@ class TicketsFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        ticketsViewModel = ViewModelProvider(
-            this,
-            TicketsViewModelFactory(
-                getTicketsAmountUseCase,
-                buyTicketUseCase,
-                returnTicketUseCase,
-                this
-            )
-        )[TicketsViewModel::class.java]
-
         ticketsViewModel.movieName.observe(viewLifecycleOwner, Observer { name ->
             if (name != null) {
                 movieNameText?.text = name
             }
         })
-
-        ticketsViewModel = ViewModelProvider(this)[TicketsViewModel::class.java]
 
         ticketsViewModel.ticketsAmount.observe(viewLifecycleOwner, Observer { ticketsAmount ->
             ticketsAmount.let {
