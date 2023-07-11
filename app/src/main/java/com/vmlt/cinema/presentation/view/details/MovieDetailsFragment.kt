@@ -10,29 +10,29 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.vmlt.cinema.R
 import com.vmlt.cinema.domain.entities.Movie
-import com.vmlt.cinema.domain.usecases.GetMovieDetailsByIdUseCase
-import com.vmlt.cinema.presentation.view.main.MainActivity
+import com.vmlt.cinema.presentation.view.MainActivity
 import com.vmlt.cinema.presentation.viewmodels.DetailsViewModel
+import com.vmlt.cinema.presentation.viewmodels.factories.CustomViewModelFactory
 import javax.inject.Inject
 
 const val INTENT_EXTRA_MOVIE_ID_KEY = "MovieId"
 
 class MovieDetailsFragment : Fragment() {
-    @Inject
-    internal lateinit var detailsViewModel: DetailsViewModel
 
     @Inject
-    internal lateinit var getMovieDetailsByIdUseCase: GetMovieDetailsByIdUseCase
-
+    lateinit var viewModelFactory: CustomViewModelFactory
+    lateinit var detailsViewModel: DetailsViewModel
 
     private var movieId: Int = -1
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).movieListComponent.inject(this)
+        detailsViewModel = ViewModelProvider(this, viewModelFactory).get(DetailsViewModel::class.java)
     }
 
     override fun onCreateView(

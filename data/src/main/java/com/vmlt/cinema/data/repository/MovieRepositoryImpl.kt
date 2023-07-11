@@ -6,10 +6,8 @@ import com.vmlt.cinema.domain.entities.MovieBasicInfo
 import com.vmlt.cinema.domain.entities.TicketsInfo
 import com.vmlt.cinema.domain.repositories.MovieRepository
 import java.util.Collections
-import javax.inject.Inject
 
-class MovieRepositoryImpl @Inject constructor(private val movieCache: MovieCacheImpl) :
-    MovieRepository {
+class MovieRepositoryImpl(private val movieCache: MovieCacheImpl) : MovieRepository {
     override fun getEntireBasicInfoMovieList(): List<MovieBasicInfo> {
         val movieBasicInfoList = mutableListOf<MovieBasicInfo>()
         for (movie in movieCache.getAllMovies()) {

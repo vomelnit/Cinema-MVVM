@@ -1,9 +1,8 @@
 package com.vmlt.cinema.domain.usecases
 
 import com.vmlt.cinema.domain.repositories.MovieRepository
-import javax.inject.Inject
 
-class BuyTicketByMovieIdUseCase @Inject constructor(private val movieRepository: MovieRepository) {
+class BuyTicketByMovieIdUseCase(private val movieRepository: MovieRepository) {
 
     suspend fun execute(movieId: Int) {
         val currentTicketsAmount: Int? =

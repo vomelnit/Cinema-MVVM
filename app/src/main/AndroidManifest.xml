@@ -15,7 +15,7 @@
         android:theme="@style/Theme.AppCompat"
         tools:targetApi="31">
         <activity
-            android:name="com.vmlt.cinema.presentation.view.main.MainActivity"
+            android:name="com.vmlt.cinema.presentation.view.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>

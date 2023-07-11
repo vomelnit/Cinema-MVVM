@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.vmlt.cinema.data.entities.SessionEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SessionDao {

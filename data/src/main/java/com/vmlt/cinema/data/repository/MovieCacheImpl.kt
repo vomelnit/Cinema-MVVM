@@ -1,7 +1,6 @@
 package com.vmlt.cinema.data.repository
 
 import com.vmlt.cinema.data.R
-import com.vmlt.cinema.data.db.CinemaDatabase
 import com.vmlt.cinema.data.db.MovieDao
 import com.vmlt.cinema.data.db.SessionDao
 import com.vmlt.cinema.data.entities.MovieEntity
@@ -11,13 +10,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class MovieCacheImpl @Inject constructor(private val cinemaDatabase: CinemaDatabase) {
-
-    private val movieDao: MovieDao = cinemaDatabase.getMovieDao()
-    private val sessionDao: SessionDao = cinemaDatabase.getSessionDao()
+class MovieCacheImpl(private val movieDao: MovieDao, private val sessionDao: SessionDao) {
 
     init {
         val context: CoroutineContext = Dispatchers.IO

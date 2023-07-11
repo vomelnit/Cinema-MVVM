@@ -7,31 +7,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vmlt.cinema.R
-import com.vmlt.cinema.domain.usecases.GetEntireMovieBasicInfoListUseCase
 import com.vmlt.cinema.presentation.adapters.MovieBasicInfoAdapter
+import com.vmlt.cinema.presentation.view.MainActivity
 import com.vmlt.cinema.presentation.view.details.INTENT_EXTRA_MOVIE_ID_KEY
 import com.vmlt.cinema.presentation.viewmodels.MoviesViewModel
+import com.vmlt.cinema.presentation.viewmodels.factories.CustomViewModelFactory
 import javax.inject.Inject
 
 
 class MainFragment : Fragment() {
 
+    @Inject
+    lateinit var viewModelFactory: CustomViewModelFactory
+    lateinit var moviesViewModel: MoviesViewModel
+
     private lateinit var adapter: MovieBasicInfoAdapter
-
-    @Inject
-    internal lateinit var moviesViewModel: MoviesViewModel
-
-    @Inject
-    internal lateinit var getEntireMovieBasicInfoListUseCase: GetEntireMovieBasicInfoListUseCase
-
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).movieListComponent.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        moviesViewModel = ViewModelProvider(this, viewModelFactory).get(MoviesViewModel::class.java)
     }
 
     override fun onCreateView(

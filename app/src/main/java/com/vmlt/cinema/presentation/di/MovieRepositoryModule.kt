@@ -1,17 +1,23 @@
 package com.vmlt.cinema.presentation.di
 
+import com.vmlt.cinema.data.db.MovieDao
+import com.vmlt.cinema.data.db.SessionDao
+import com.vmlt.cinema.data.repository.MovieCacheImpl
 import com.vmlt.cinema.data.repository.MovieRepositoryImpl
 import com.vmlt.cinema.domain.repositories.MovieRepository
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import javax.inject.Singleton
 
-
 @Module
-abstract class MovieRepositoryModule() {
+class MovieRepositoryModule {
 
+    @Provides
+    fun provideMovieCache(movieDao: MovieDao, sessionDao: SessionDao) : MovieCacheImpl =
+        MovieCacheImpl(movieDao, sessionDao)
+
+    @Provides
     @Singleton
-    @Binds
-    abstract fun provideMovieRepository(movieRepositoryImpl: MovieRepositoryImpl): MovieRepository
-
+    fun provideMovieRepository(movieCache: MovieCacheImpl) : MovieRepository =
+        MovieRepositoryImpl(movieCache)
 }

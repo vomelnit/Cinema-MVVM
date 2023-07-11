@@ -1,12 +1,14 @@
-package com.vmlt.cinema.presentation.di
+package com.vmlt.cinema.presentation.di.subcomponent
 
+import com.vmlt.cinema.presentation.di.subcomponent.viewmodel.ViewModelsModule
 import com.vmlt.cinema.presentation.view.details.MovieDetailsFragment
 import com.vmlt.cinema.presentation.view.main.MainFragment
 import com.vmlt.cinema.presentation.view.tickets.TicketsFragment
 import dagger.Subcomponent
 
-
-@Subcomponent
+@Subcomponent(
+    modules = [ViewModelsModule::class]
+)
 interface MovieComponent {
 
     @Subcomponent.Factory
